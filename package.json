@@ -1,0 +1,30 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "nodejs",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --inspect index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dung-Bap/nodejs.git"
+  },
+  "keywords": [
+    "nodejs",
+    "node",
+    "learn",
+    "nodejs"
+  ],
+  "author": "dunbap",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dung-Bap/nodejs/issues"
+  },
+  "homepage": "https://github.com/Dung-Bap/nodejs#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1"
+  }
+}
