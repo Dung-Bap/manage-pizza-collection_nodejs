@@ -1,1 +1,21 @@
-<h1>home page<h1>
+<div class="mt-4">
+    <div class="row">
+        {{#each pizzaCollections}}
+            <div class="col-sm-6 col-lg-4">
+                <div class="card">
+                    <a href="/pizza-detail/{{this.slug}}">
+                        <img
+                            class="card-img-top"
+                            src={{this.image}}
+                            alt="Card image cap"
+                        />
+                    </a>
+                    <div class="card-body">
+                        <p class="card-text">{{this.name}}</p>
+                        <a href="#" class="btn btn-primary">{{this.price}}</a>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
