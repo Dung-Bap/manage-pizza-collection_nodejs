@@ -1,0 +1,33 @@
+<div class="mt-4">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Date Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each pizzaCollections}}
+                {{! sử dụng helper để cộng }}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td>{{this.name}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td>
+                        <a
+                            href="/pizza-detail/{{this._id}}/edit"
+                            class="badge badge-primary"
+                        >Edit</a>
+                    </td>
+                    <td>
+                        <a href="#" class="badge badge-danger">Deleted</a>
+                    </td>
+                </tr>
+            {{/each}}
+
+        </tbody>
+    </table>
+</div>

@@ -22,6 +22,21 @@ class PizzaDetailController {
             .then(() => res.redirect("/"))
             .catch();
     }
+
+    edit(req, res, next) {
+        PizzaCollection.findById(req.params.id)
+            .lean()
+            .then((pizzaDetail) => {
+                res.render("pizzaDetail/edit", { pizzaDetail });
+            })
+            .catch(next);
+    }
+
+    update(req, res, next) {
+        PizzaCollection.updateOne({ _id: req.params.id }, req.body)
+            .then(() => res.redirect("/me/stored/all-pizza-collection"))
+            .catch(next);
+    }
 }
 
 module.exports = new PizzaDetailController();

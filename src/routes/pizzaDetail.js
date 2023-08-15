@@ -9,6 +9,10 @@ router.get("/create", pizzaDetailController.create);
 
 router.post("/store", pizzaDetailController.store);
 
+router.get("/:id/edit", pizzaDetailController.edit);
+
+router.put("/:id", pizzaDetailController.update);
+
 router.get("/:slug", pizzaDetailController.show);
 
 module.exports = router;
