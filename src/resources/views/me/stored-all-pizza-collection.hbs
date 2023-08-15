@@ -9,25 +9,74 @@
             </tr>
         </thead>
         <tbody>
-            {{#each pizzaCollections}}
-                {{! sử dụng helper để cộng }}
-                <tr>
-                    <th scope="row">{{sum @index 1}}</th>
-                    <td>{{this.name}}</td>
-                    <td>{{this.price}}</td>
-                    <td>{{this.createdAt}}</td>
-                    <td>
-                        <a
-                            href="/pizza-detail/{{this._id}}/edit"
-                            class="badge badge-primary"
-                        >Edit</a>
-                    </td>
-                    <td>
-                        <a href="#" class="badge badge-danger">Deleted</a>
-                    </td>
-                </tr>
+            {{#each pizzaCollections}} {{! sử dụng helper để cộng }}
+            <tr>
+                <th scope="row">{{sum @index 1}}</th>
+                <td>{{this.name}}</td>
+                <td>{{this.price}}</td>
+                <td>{{this.createdAt}}</td>
+                <td>
+                    <a href="/pizza-detail/{{this._id}}/edit" class="badge badge-primary">Edit</a>
+                </td>
+                <td>
+                    <a
+                        href=""
+                        class="badge badge-danger"
+                        data-toggle="modal"
+                        data-target="#modal-delete-pizza"
+                        data-id="{{this._id}}"
+                        >Delete</a
+                    >
+                </td>
+            </tr>
             {{/each}}
-
         </tbody>
     </table>
 </div>
+
+{{! modal delete pizza collection }}
+<div
+    class="modal fade"
+    id="modal-delete-pizza"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Pizza?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">You want to delete?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="btn-delete-pizza">Delete now!!!</button>
+            </div>
+        </div>
+    </div>
+</div>
+<form name="form-delete-pizza" method="POST"></form>
+
+{{! }}
+<script>
+    let idPizza;
+    const btnDelete = document.getElementById('btn-delete-pizza');
+    let formDelete = document.forms['form-delete-pizza'];
+
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#modal-delete-pizza').on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget);
+            idPizza = button.data('id');
+        });
+    });
+
+    btnDelete.onclick = function () {
+        console.log('ahihi');
+        formDelete.action = '/pizza-detail/' + idPizza + '?_method=DELETE';
+        formDelete.submit();
+    };
+</script>
