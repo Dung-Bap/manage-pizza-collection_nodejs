@@ -2,35 +2,18 @@
     <form method="POST" action="/pizza-detail/{{pizzaDetail._id}}?_method=PUT">
         <div class="form-group">
             <label for="name">Name </label>
-            <input
-                type="text"
-                class="form-control"
-                value="{{pizzaDetail.name}}"
-                id="name"
-                name="name"
-            />
+            <input type="text" class="form-control" value="{{pizzaDetail.name}}" id="name" name="name" />
         </div>
         <div class="form-group">
             <label for="image">Image </label>
-            <input
-                type="text"
-                class="form-control"
-                value="{{pizzaDetail.image}}"
-                id="image"
-                name="image"
-            />
+            <input type="text" class="form-control" value="{{pizzaDetail.image}}" id="image" name="image" />
         </div>
         <div class="form-group">
             <label for="price">Price</label>
-            <input
-                type="text"
-                class="form-control"
-                value="{{pizzaDetail.price}}"
-                id="price"
-                name="price"
-            />
+            <input type="text" class="form-control" value="{{pizzaDetail.price}}" id="price" name="price" />
         </div>
 
         <button type="submit" class="btn btn-primary">Update Pizza</button>
+        <a href="/me/stored/all-pizza-collection">Back to all pizza collection</a>
     </form>
 </div>

@@ -13,7 +13,11 @@ router.get('/:id/edit', pizzaDetailController.edit);
 
 router.put('/:id', pizzaDetailController.update);
 
+router.patch('/:id/restore', pizzaDetailController.restore);
+
 router.delete('/:id', pizzaDetailController.delete);
+
+router.delete('/:id/permanentlyDelete', pizzaDetailController.permanentlyDelete);
 
 router.get('/:slug', pizzaDetailController.show);
 

@@ -19,7 +19,7 @@ class PizzaDetailController {
         const newPizza = new PizzaCollection(req.body);
         newPizza
             .save()
-            .then(() => res.redirect('/'))
+            .then(() => res.redirect('/me/stored/all-pizza-collection'))
             .catch();
     }
 
@@ -38,7 +38,19 @@ class PizzaDetailController {
             .catch(next);
     }
 
+    restore(req, res, next) {
+        PizzaCollection.restore({ _id: req.params.id })
+            .then(() => res.redirect('back'))
+            .catch(next);
+    }
+
     delete(req, res, next) {
+        PizzaCollection.delete({ _id: req.params.id })
+            .then(() => res.redirect('back'))
+            .catch(next);
+    }
+
+    permanentlyDelete(req, res, next) {
         PizzaCollection.deleteOne({ _id: req.params.id })
             .then(() => res.redirect('back'))
             .catch(next);

@@ -1,10 +1,9 @@
 <div class="mt-4">
     <div class="d-flex justify-content-between">
+        <h3>TRASH</h3>
         <div>
-            <h3>All Pizza Collection</h3>
-            <div><a class="badge badge-primary" href="/pizza-detail/create">Create Pizza collection</a></div>
+            <a class="badge badge-primary" href="/me/stored/all-pizza-collection">Back to all pizza collection</a>
         </div>
-        <div><a class="badge badge-danger" href="/me/trash/all-pizza-collection">Move to Trash</a></div>
     </div>
     <table class="table">
         <thead>
@@ -12,7 +11,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Price</th>
-                <th scope="col">Date Created</th>
+                <th scope="col">DeletedAt</th>
             </tr>
         </thead>
         <tbody>
@@ -21,9 +20,9 @@
                 <th scope="row">{{sum @index 1}}</th>
                 <td>{{this.name}}</td>
                 <td>{{this.price}}</td>
-                <td>{{this.createdAt}}</td>
+                <td>{{this.deletedAt}}</td>
                 <td>
-                    <a href="/pizza-detail/{{this._id}}/edit" class="badge badge-primary">Edit</a>
+                    <a href="" class="badge badge-primary" id="btn-restore-pizza" data-id="{{this._id}}">Restore</a>
                 </td>
                 <td>
                     <a
@@ -39,8 +38,10 @@
             {{else}}
             <tr>
                 <td colspan="5" class="text-center">
-                    No more collections!!!
-                    <a class="badge badge-primary" href="/pizza-detail/create">Create Pizza collection</a>
+                    There are no more collections in the trash!!!
+                    <a class="badge badge-primary" href="/me/stored/all-pizza-collection"
+                        >Back to all pizza collection</a
+                    >
                 </td>
             </tr>
             {{/each}}
@@ -48,6 +49,7 @@
     </table>
 </div>
 
+{{! modal delete pizza collection }}
 <div
     class="modal fade"
     id="modal-delete-pizza"
@@ -64,29 +66,43 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">You want to delete?</div>
+            <div class="modal-body">Permanently delete can not restore anymore, you want to delete ?</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" id="btn-delete-pizza">Delete now!!!</button>
+                <button type="button" class="btn btn-danger" id="btn-delete-pizza">Permanently delete!!!</button>
             </div>
         </div>
     </div>
 </div>
 <form name="form-delete-pizza" method="POST"></form>
+<form name="form-restore-pizza" method="POST"></form>
 
 {{! }}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         let idPizza;
-        const btnDelete = document.getElementById('btn-delete-pizza');
-        const formDelete = document.forms['form-delete-pizza'];
+        const btnPermanentlyDelete = document.getElementById('btn-delete-pizza');
+        const btnRestorePizza = document.querySelectorAll('#btn-restore-pizza');
+
+        const formPermanentlyDelete = document.forms['form-delete-pizza'];
+        const formRestorePizza = document.forms['form-restore-pizza'];
         $('#modal-delete-pizza').on('show.bs.modal', function (event) {
             const button = $(event.relatedTarget);
             idPizza = button.data('id');
         });
-        btnDelete.onclick = function () {
-            formDelete.action = '/pizza-detail/' + idPizza + '?_method=DELETE';
-            formDelete.submit();
+
+        btnPermanentlyDelete.onclick = function () {
+            formPermanentlyDelete.action = '/pizza-detail/' + idPizza + '/permanentlyDelete?_method=DELETE';
+            formPermanentlyDelete.submit();
         };
+
+        for (let i = 0; i < btnRestorePizza.length; i++) {
+            btnRestorePizza[i].onclick = function (e) {
+                e.preventDefault();
+                let idPizzaRestore = $(this).data('id');
+                formRestorePizza.action = '/pizza-detail/' + idPizzaRestore + '/restore?_method=PATCH';
+                formRestorePizza.submit();
+            };
+        }
     });
 </script>
