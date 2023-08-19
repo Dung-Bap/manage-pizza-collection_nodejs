@@ -2,27 +2,25 @@
 const PizzaCollection = require('../models/PizzaCollection');
 
 class MeController {
-    stored(req, res, next) {
-        PizzaCollection.find({})
-            .lean()
-            .then(pizzaCollections =>
-                res.render('me/stored-all-pizza-collection', {
-                    pizzaCollections,
-                })
-            )
-            .catch(next);
+    async stored(req, res, next) {
+        try {
+            const pizzaCollections = await PizzaCollection.find({}).lean();
+            const countDelete = await PizzaCollection.countDocumentsWithDeleted({ deleted: true });
+            res.render('me/stored-all-pizza-collection', { pizzaCollections, countDelete });
+        } catch (err) {
+            next(err);
+        }
     }
 
-    trash(req, res, next) {
-        // Thư viện củ chuối, fix chỗ này nhé !!!
-        PizzaCollection.findWithDeleted({ deleted: true })
-            .lean()
-            .then(pizzaCollections =>
-                res.render('me/trash-all-pizza-collection', {
-                    pizzaCollections,
-                })
-            )
-            .catch(next);
+    async trash(req, res, next) {
+        try {
+            const pizzaCollections = await PizzaCollection.findWithDeleted({ deleted: true }).lean();
+            res.render('me/trash-all-pizza-collection', {
+                pizzaCollections,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 }
 

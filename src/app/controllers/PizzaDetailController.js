@@ -55,6 +55,36 @@ class PizzaDetailController {
             .then(() => res.redirect('back'))
             .catch(next);
     }
+
+    handleFormActions(req, res, next) {
+        switch (req.body.action) {
+            case 'delete':
+                PizzaCollection.delete({ _id: { $in: req.body.pizzaIds } })
+                    .then(() => res.redirect('back'))
+                    .catch(next);
+                break;
+
+            default:
+                res.json({ message: 'Actions is invalid!!!' });
+        }
+    }
+
+    handleFormTrashActions(req, res, next) {
+        switch (req.body.action) {
+            case 'restore':
+                PizzaCollection.restore({ _id: { $in: req.body.pizzaIds } })
+                    .then(() => res.redirect('back'))
+                    .catch(next);
+                break;
+            case 'permanently-delete':
+                PizzaCollection.deleteMany({ _id: { $in: req.body.pizzaIds } })
+                    .then(() => res.redirect('back'))
+                    .catch(next);
+                break;
+            default:
+                res.json({ message: 'Actions is invalid!!!' });
+        }
+    }
 }
 
 module.exports = new PizzaDetailController();

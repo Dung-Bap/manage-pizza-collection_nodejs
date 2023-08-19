@@ -1,22 +1,49 @@
-<div class="mt-4">
+<form class="mt-4" method="POST" name="container-form" action="/pizza-detail/handle-form-trash-actions">
     <div class="d-flex justify-content-between">
         <h3>TRASH</h3>
         <div>
             <a class="badge badge-primary" href="/me/stored/all-pizza-collection">Back to all pizza collection</a>
         </div>
     </div>
+    {{#if pizzaCollections}}
+    <div class="d-flex align-items-center">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="checked-all-in-trash" />
+            <label class="form-check-label" for="checked-all-in-trash"> Select All In Trash </label>
+        </div>
+        <select class="custom-select select-action" id="inputGroupSelect01" name="action" required>
+            <option value="" selected hidden>Actions...</option>
+            <option value="restore">Restore</option>
+            <option value="permanently-delete">Permanently delete</option>
+        </select>
+        <button type="submit" class="btn btn-info submit-btn disabled">Submit</button>
+    </div>
+    {{/if}}
+
     <table class="table">
+        {{#if pizzaCollections}}
         <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col" colspan="2">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Price</th>
-                <th scope="col">DeletedAt</th>
+                <th scope="col" colspan="3">DeletedAt</th>
             </tr>
         </thead>
+        {{/if}}
         <tbody>
             {{#each pizzaCollections}} {{! sử dụng helper để cộng }}
             <tr>
+                <td>
+                    <div class="form-check">
+                        <input
+                            class="form-check-input checked-items"
+                            type="checkbox"
+                            value="{{this._id}}"
+                            name="pizzaIds"
+                        />
+                    </div>
+                </td>
                 <th scope="row">{{sum @index 1}}</th>
                 <td>{{this.name}}</td>
                 <td>{{this.price}}</td>
@@ -31,7 +58,7 @@
                         data-toggle="modal"
                         data-target="#modal-delete-pizza"
                         data-id="{{this._id}}"
-                        >Delete</a
+                        >Permanently delete</a
                     >
                 </td>
             </tr>
@@ -47,7 +74,7 @@
             {{/each}}
         </tbody>
     </table>
-</div>
+</form>
 
 {{! modal delete pizza collection }}
 <div
@@ -83,9 +110,13 @@
         let idPizza;
         const btnPermanentlyDelete = document.getElementById('btn-delete-pizza');
         const btnRestorePizza = document.querySelectorAll('#btn-restore-pizza');
-
         const formPermanentlyDelete = document.forms['form-delete-pizza'];
         const formRestorePizza = document.forms['form-restore-pizza'];
+        const checkedAllInTrash = $('#checked-all-in-trash');
+        const checkedItems = $('.checked-items');
+        const submitBtn = $('.submit-btn');
+        const containerForm = document.forms['container-form'];
+
         $('#modal-delete-pizza').on('show.bs.modal', function (event) {
             const button = $(event.relatedTarget);
             idPizza = button.data('id');
@@ -103,6 +134,26 @@
                 formRestorePizza.action = '/pizza-detail/' + idPizzaRestore + '/restore?_method=PATCH';
                 formRestorePizza.submit();
             };
+        }
+
+        // Handle checked all in trash
+        checkedAllInTrash.change(function () {
+            const isAllChecked = this.checked;
+            checkedItems.prop('checked', isAllChecked);
+            HandleSubmitBtn();
+        });
+
+        //Handle checked items when cicked
+        checkedItems.change(function () {
+            const isAllCheckedItems = checkedItems.length === $('.checked-items:checked').length;
+            checkedAllInTrash.prop('checked', isAllCheckedItems);
+            HandleSubmitBtn();
+        });
+
+        // Handle submit btn
+        function HandleSubmitBtn() {
+            const checkedCount = $('.checked-items:checked').length;
+            checkedCount ? submitBtn.removeClass('disabled') : submitBtn.addClass('disabled');
         }
     });
 </script>

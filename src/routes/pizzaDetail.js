@@ -9,6 +9,10 @@ router.get('/create', pizzaDetailController.create);
 
 router.post('/store', pizzaDetailController.store);
 
+router.post('/handle-form-actions', pizzaDetailController.handleFormActions);
+
+router.post('/handle-form-trash-actions', pizzaDetailController.handleFormTrashActions);
+
 router.get('/:id/edit', pizzaDetailController.edit);
 
 router.put('/:id', pizzaDetailController.update);

@@ -1,23 +1,55 @@
-<div class="mt-4">
+<form class="mt-4" method="POST" action="/pizza-detail/handle-form-actions">
     <div class="d-flex justify-content-between">
         <div>
             <h3>All Pizza Collection</h3>
             <div><a class="badge badge-primary" href="/pizza-detail/create">Create Pizza collection</a></div>
         </div>
-        <div><a class="badge badge-danger" href="/me/trash/all-pizza-collection">Move to Trash</a></div>
+
+        {{#if countDelete}}
+        <div>
+            <a class="badge badge-danger" href="/me/trash/all-pizza-collection">Move to Trash ({{countDelete}})</a>
+        </div>
+        {{/if}}
     </div>
+
+    {{#if pizzaCollections}}
+    <div class="d-flex align-items-center">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="checked-all" />
+            <label class="form-check-label" for="checked-all"> Select All Pizza Collection </label>
+        </div>
+        <select class="custom-select select-action" id="inputGroupSelect01" name="action" required>
+            <option value="" selected hidden>Action...</option>
+            <option value="delete">Delete</option>
+        </select>
+        <button type="submit" class="btn btn-info submit-btn disabled">Submit</button>
+    </div>
+    {{/if}}
+
     <table class="table">
+        {{#if pizzaCollections}}
         <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col" colspan="2">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Price</th>
-                <th scope="col">Date Created</th>
+                <th scope="col" colspan="3">Date Created</th>
             </tr>
         </thead>
+        {{/if}}
         <tbody>
             {{#each pizzaCollections}} {{! sử dụng helper để cộng }}
             <tr>
+                <td>
+                    <div class="form-check">
+                        <input
+                            class="form-check-input check-items"
+                            type="checkbox"
+                            name="pizzaIds"
+                            value="{{this._id}}"
+                        />
+                    </div>
+                </td>
                 <th scope="row">{{sum @index 1}}</th>
                 <td>{{this.name}}</td>
                 <td>{{this.price}}</td>
@@ -46,7 +78,7 @@
             {{/each}}
         </tbody>
     </table>
-</div>
+</form>
 
 <div
     class="modal fade"
@@ -80,6 +112,10 @@
         let idPizza;
         const btnDelete = document.getElementById('btn-delete-pizza');
         const formDelete = document.forms['form-delete-pizza'];
+        const checkAll = $('#checked-all');
+        const checkItems = $('.check-items');
+        const submitBtn = $('.submit-btn');
+
         $('#modal-delete-pizza').on('show.bs.modal', function (event) {
             const button = $(event.relatedTarget);
             idPizza = button.data('id');
@@ -88,5 +124,24 @@
             formDelete.action = '/pizza-detail/' + idPizza + '?_method=DELETE';
             formDelete.submit();
         };
+
+        // Handle check all change
+        checkAll.change(function () {
+            const isAllChecked = this.checked;
+            checkItems.prop('checked', isAllChecked);
+            handleSubmitBtn();
+        });
+        // Handle check items change
+        checkItems.change(function () {
+            const isChecked = checkItems.length === $('.check-items:checked').length;
+            checkAll.prop('checked', isChecked);
+            handleSubmitBtn();
+        });
+
+        // Handle submit btn
+        function handleSubmitBtn() {
+            const checkedCount = $('.check-items:checked').length;
+            checkedCount ? submitBtn.removeClass('disabled') : submitBtn.addClass('disabled');
+        }
     });
 </script>

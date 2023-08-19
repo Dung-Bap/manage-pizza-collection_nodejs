@@ -1,6 +1,20 @@
 /** @format */
-@import "variable";
+@import 'variable';
 
 h1 {
-  color: red;
+    color: red;
+}
+
+.select-action {
+    width: 160px;
+    margin: 20px;
+}
+
+.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
+.none {
+    display: none;
 }
